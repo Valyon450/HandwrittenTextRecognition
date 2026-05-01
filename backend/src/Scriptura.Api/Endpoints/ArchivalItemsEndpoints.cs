@@ -16,6 +16,7 @@ public static class ArchivalItemsEndpoints
 
         group.MapPost("/", CreateArchivalItem);
         group.MapGet("/{id:guid}", GetArchivalItemById);
+        group.MapPost("/{id:guid}/settlements", LinkSettlement);
     }
 
     private static async Task<IResult> CreateArchivalItem(
@@ -65,5 +66,34 @@ public static class ArchivalItemsEndpoints
             item.Type.ToString());
 
         return Results.Ok(response);
+    }
+
+    private static async Task<IResult> LinkSettlement(
+        Guid id,
+        [FromBody] LinkSettlementRequest request,
+        [FromServices] IArchivalItemRepository archivalRepository,
+        [FromServices] ISettlementRepository settlementRepository,
+        CancellationToken cancellationToken)
+    {
+        var item = await archivalRepository.GetByIdWithScansAsync(id, cancellationToken);
+        if (item is null)
+            return Results.NotFound(new { Message = $"Archival item with ID {id} not found." });
+
+        var settlement = await settlementRepository.GetByIdAsync(request.SettlementId, cancellationToken);
+        if (settlement is null)
+            return Results.BadRequest(new { Message = $"Settlement with ID {request.SettlementId} does not exist." });
+
+        try
+        {
+            item.LinkToSettlement(request.SettlementId);
+        }
+        catch (ArgumentException ex)
+        {
+            return Results.BadRequest(new { Message = ex.Message });
+        }
+
+        await archivalRepository.SaveChangesAsync(cancellationToken);
+
+        return Results.Ok(new { Message = "Settlement linked successfully." });
     }
 }
