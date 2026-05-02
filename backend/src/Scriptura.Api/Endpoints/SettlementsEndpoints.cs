@@ -15,6 +15,7 @@ public static class SettlementsEndpoints
                        .WithTags("Settlements");
 
         group.MapPost("/", CreateSettlement);
+        group.MapGet("/{id:guid}", GetSettlementById);
     }
 
     private static async Task<IResult> CreateSettlement(
@@ -55,5 +56,24 @@ public static class SettlementsEndpoints
         );
 
         return Results.Created($"/api/settlements/{settlement.Id}", response);
+    }
+
+    private static async Task<IResult> GetSettlementById(
+        Guid id,
+        [FromServices] ISettlementRepository repository,
+        CancellationToken cancellationToken)
+    {
+        var settlement = await repository.GetByIdAsync(id, cancellationToken);
+
+        if (settlement is null)
+            return Results.NotFound(new { Message = $"Settlement with ID {id} not found." });
+
+        var response = new SettlementResponse(
+            settlement.Id,
+            settlement.CurrentName,
+            settlement.Type.ToString(),
+            settlement.ModernAdminDivision?.Region);
+
+        return Results.Ok(response);
     }
 }
