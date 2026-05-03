@@ -16,6 +16,7 @@ public static class SettlementsEndpoints
 
         group.MapPost("/", CreateSettlement);
         group.MapGet("/{id:guid}", GetSettlementById);
+        group.MapPost("/{id:guid}/alternative-names", AddAlternativeName);
     }
 
     private static async Task<IResult> CreateSettlement(
@@ -75,5 +76,26 @@ public static class SettlementsEndpoints
             settlement.ModernAdminDivision?.Region);
 
         return Results.Ok(response);
+    }
+
+    private static async Task<IResult> AddAlternativeName(
+        Guid id,
+        [FromBody] AddAlternativeNameRequest request,
+        [FromServices] ISettlementRepository repository,
+        CancellationToken cancellationToken)
+    {
+        var settlement = await repository.GetByIdAsync(id, cancellationToken);
+
+        if (settlement is null)
+            return Results.NotFound(new { Message = $"Settlement with ID {id} not found." });
+
+        if (string.IsNullOrWhiteSpace(request.Name))
+            return Results.BadRequest(new { Message = "Alternative name cannot be empty." });
+
+        settlement.AddAlternativeName(request.Name);
+
+        await repository.SaveChangesAsync(cancellationToken);
+
+        return Results.Ok(new { Message = "Alternative name added successfully." });
     }
 }
