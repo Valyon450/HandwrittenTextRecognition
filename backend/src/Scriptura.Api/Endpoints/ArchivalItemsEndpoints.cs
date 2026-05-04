@@ -44,7 +44,8 @@ public static class ArchivalItemsEndpoints
             item.Id,
             item.Title,
             $"{item.Signature.ArchiveCode} {item.Signature.Fond}-{item.Signature.Inventory}-{item.Signature.ItemNumber}",
-            item.Type.ToString());
+            item.Type.ToString(),
+            item.SettlementIds);
 
         return Results.Created($"/api/archival-items/{item.Id}", response);
     }
@@ -63,7 +64,8 @@ public static class ArchivalItemsEndpoints
             item.Id,
             item.Title,
             $"{item.Signature.ArchiveCode} {item.Signature.Fond}-{item.Signature.Inventory}-{item.Signature.ItemNumber}",
-            item.Type.ToString());
+            item.Type.ToString(),
+            item.SettlementIds);
 
         return Results.Ok(response);
     }

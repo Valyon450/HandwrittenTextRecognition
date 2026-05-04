@@ -53,8 +53,8 @@ public static class SettlementsEndpoints
             settlement.Id,
             settlement.CurrentName,
             settlement.Type.ToString(),
-            settlement.ModernAdminDivision?.Region
-        );
+            settlement.ModernAdminDivision?.Region,
+            settlement.AlternativeNames);
 
         return Results.Created($"/api/settlements/{settlement.Id}", response);
     }
@@ -73,7 +73,8 @@ public static class SettlementsEndpoints
             settlement.Id,
             settlement.CurrentName,
             settlement.Type.ToString(),
-            settlement.ModernAdminDivision?.Region);
+            settlement.ModernAdminDivision?.Region,
+            settlement.AlternativeNames);
 
         return Results.Ok(response);
     }

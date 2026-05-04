@@ -4,5 +4,6 @@ public record ArchivalItemResponse(
     Guid Id,
     string Title,
     string FullSignature,
-    string Type
+    string Type,
+    IEnumerable<Guid> AlternativeNames
 );

@@ -4,5 +4,6 @@ public record SettlementResponse(
     Guid Id,
     string CurrentName,
     string Type,
-    string? ModernRegion
+    string? ModernRegion,
+    IEnumerable<string> AlternativeNames
 );
