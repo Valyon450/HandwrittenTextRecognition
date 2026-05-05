@@ -14,6 +14,18 @@ internal sealed class ArchivalItemRepository(ScripturaDbContext dbContext)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
+    public async Task<IReadOnlyList<ArchivalItem>> GetAllAsync(Guid? settlementId = null, CancellationToken cancellationToken = default)
+    {
+        var query = DbContext.Set<ArchivalItem>().AsNoTracking();
+
+        if (settlementId.HasValue)
+        {
+            query = query.Where(x => x.SettlementIds.Contains(settlementId.Value));
+        }
+
+        return await query.ToListAsync(cancellationToken);
+    }
+
     public void Add(ArchivalItem item)
     {
         DbContext.Set<ArchivalItem>().Add(item);

@@ -17,6 +17,7 @@ public static class ArchivalItemsEndpoints
         group.MapPost("/", CreateArchivalItem);
         group.MapGet("/{id:guid}", GetArchivalItemById);
         group.MapPost("/{id:guid}/settlements", LinkSettlement);
+        group.MapGet("/", GetAllArchivalItems);
     }
 
     private static async Task<IResult> CreateArchivalItem(
@@ -97,5 +98,23 @@ public static class ArchivalItemsEndpoints
         await archivalRepository.SaveChangesAsync(cancellationToken);
 
         return Results.Ok(new { Message = "Settlement linked successfully." });
+    }
+
+    private static async Task<IResult> GetAllArchivalItems(
+        [FromQuery] Guid? settlementId,
+        [FromServices] IArchivalItemRepository repository,
+        CancellationToken cancellationToken)
+    {
+        var items = await repository.GetAllAsync(settlementId, cancellationToken);
+
+        var response = items.Select(item => new ArchivalItemResponse(
+            item.Id,
+            item.Title,
+            $"{item.Signature.ArchiveCode} {item.Signature.Fond}-{item.Signature.Inventory}-{item.Signature.ItemNumber}",
+            item.Type.ToString(),
+            item.SettlementIds
+        ));
+
+        return Results.Ok(response);
     }
 }
