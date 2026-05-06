@@ -17,6 +17,7 @@ public static class SettlementsEndpoints
         group.MapPost("/", CreateSettlement);
         group.MapGet("/{id:guid}", GetSettlementById);
         group.MapPost("/{id:guid}/alternative-names", AddAlternativeName);
+        group.MapGet("/", GetAllSettlements);
     }
 
     private static async Task<IResult> CreateSettlement(
@@ -75,6 +76,22 @@ public static class SettlementsEndpoints
             settlement.Type.ToString(),
             settlement.ModernAdminDivision?.Region,
             settlement.AlternativeNames);
+
+        return Results.Ok(response);
+    }
+
+    private static async Task<IResult> GetAllSettlements(
+        [FromServices] ISettlementRepository repository,
+        CancellationToken cancellationToken)
+    {
+        var settlements = await repository.GetAllAsync(cancellationToken);
+
+        var response = settlements.Select(s => new SettlementResponse(
+            s.Id,
+            s.CurrentName,
+            s.Type.ToString(),
+            s.ModernAdminDivision?.Region,
+            s.AlternativeNames));
 
         return Results.Ok(response);
     }

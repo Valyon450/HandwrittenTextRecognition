@@ -10,6 +10,11 @@ internal sealed class SettlementRepository(ScripturaDbContext dbContext)
     public Task<Settlement?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         => DbContext.Set<Settlement>().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
+    public async Task<IReadOnlyList<Settlement>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        return await DbContext.Set<Settlement>().AsNoTracking().ToListAsync(cancellationToken);
+    }
+
     public void Add(Settlement settlement)
         => DbContext.Set<Settlement>().Add(settlement);
 
