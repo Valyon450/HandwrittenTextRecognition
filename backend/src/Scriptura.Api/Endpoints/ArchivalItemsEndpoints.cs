@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Scriptura.Api.Contracts;
 using Scriptura.Domain.Entities.Catalog;
+using Scriptura.Domain.Entities.Digitization;
 using Scriptura.Domain.Enums;
 using Scriptura.Domain.Repositories;
 using Scriptura.Domain.ValueObjects;
@@ -18,6 +19,7 @@ public static class ArchivalItemsEndpoints
         group.MapGet("/{id:guid}", GetArchivalItemById);
         group.MapPost("/{id:guid}/settlements", LinkSettlement);
         group.MapGet("/", GetAllArchivalItems);
+        group.MapPost("/{id:guid}/scans", AddScan);
     }
 
     private static async Task<IResult> CreateArchivalItem(
@@ -116,5 +118,35 @@ public static class ArchivalItemsEndpoints
         ));
 
         return Results.Ok(response);
+    }
+
+    private static async Task<IResult> AddScan(
+        Guid id,
+        [FromBody] AddScanRequest request,
+        [FromServices] IArchivalItemRepository repository,
+        CancellationToken cancellationToken)
+    {
+        var item = await repository.GetByIdWithScansAsync(id, cancellationToken);
+
+        if (item is null)
+            return Results.NotFound(new { Message = $"Archival item with ID {id} not found." });
+
+        try
+        {
+            var scan = Scan.Create(
+                archivalItemId: item.Id,
+                orderNumber: request.OrderNumber,
+                sourceUrl: request.SourceUrl);
+
+            item.AddScan(scan);
+        }
+        catch (ArgumentException ex)
+        {
+            return Results.BadRequest(new { Message = ex.Message });
+        }
+
+        await repository.SaveChangesAsync(cancellationToken);
+
+        return Results.Ok(new { Message = "Scan added successfully." });
     }
 }

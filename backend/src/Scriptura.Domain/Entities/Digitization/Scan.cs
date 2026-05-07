@@ -1,5 +1,4 @@
-﻿using Scriptura.Domain.Entities.Catalog;
-using Scriptura.Domain.Primitives;
+﻿using Scriptura.Domain.Primitives;
 
 namespace Scriptura.Domain.Entities.Digitization
 {
