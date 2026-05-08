@@ -5,5 +5,6 @@ public record ArchivalItemResponse(
     string Title,
     string FullSignature,
     string Type,
-    IEnumerable<Guid> AlternativeNames
+    IEnumerable<Guid> AlternativeNames,
+    IEnumerable<ScanResponse> Scans
 );

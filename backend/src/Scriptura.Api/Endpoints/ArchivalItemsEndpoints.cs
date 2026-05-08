@@ -48,7 +48,8 @@ public static class ArchivalItemsEndpoints
             item.Title,
             $"{item.Signature.ArchiveCode} {item.Signature.Fond}-{item.Signature.Inventory}-{item.Signature.ItemNumber}",
             item.Type.ToString(),
-            item.SettlementIds);
+            item.SettlementIds,
+            []);
 
         return Results.Created($"/api/archival-items/{item.Id}", response);
     }
@@ -68,7 +69,8 @@ public static class ArchivalItemsEndpoints
             item.Title,
             $"{item.Signature.ArchiveCode} {item.Signature.Fond}-{item.Signature.Inventory}-{item.Signature.ItemNumber}",
             item.Type.ToString(),
-            item.SettlementIds);
+            item.SettlementIds,
+            item.Scans.Select(s => new ScanResponse(s.OrderNumber, s.SourceUrl)));
 
         return Results.Ok(response);
     }
@@ -114,8 +116,8 @@ public static class ArchivalItemsEndpoints
             item.Title,
             $"{item.Signature.ArchiveCode} {item.Signature.Fond}-{item.Signature.Inventory}-{item.Signature.ItemNumber}",
             item.Type.ToString(),
-            item.SettlementIds
-        ));
+            item.SettlementIds,            
+            item.Scans?.Select(s => new ScanResponse(s.OrderNumber, s.SourceUrl)) ?? []));
 
         return Results.Ok(response);
     }
