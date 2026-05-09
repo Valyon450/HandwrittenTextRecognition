@@ -18,6 +18,7 @@ public static class SettlementsEndpoints
         group.MapGet("/{id:guid}", GetSettlementById);
         group.MapPost("/{id:guid}/alternative-names", AddAlternativeName);
         group.MapGet("/", GetAllSettlements);
+        group.MapPut("/{id:guid}/location", UpdateLocation);
     }
 
     private static async Task<IResult> CreateSettlement(
@@ -115,5 +116,25 @@ public static class SettlementsEndpoints
         await repository.SaveChangesAsync(cancellationToken);
 
         return Results.Ok(new { Message = "Alternative name added successfully." });
+    }
+
+    private static async Task<IResult> UpdateLocation(
+        Guid id,
+        [FromBody] UpdateLocationRequest request,
+        [FromServices] ISettlementRepository repository,
+        CancellationToken cancellationToken)
+    {
+        var settlement = await repository.GetByIdAsync(id, cancellationToken);
+
+        if (settlement is null)
+            return Results.NotFound(new { Message = $"Settlement with ID {id} not found." });
+
+        var newLocation = new Coordinate(request.Latitude, request.Longitude);
+
+        settlement.UpdateLocation(newLocation);
+
+        await repository.SaveChangesAsync(cancellationToken);
+
+        return Results.Ok(new { Message = "Settlement location updated successfully." });
     }
 }
