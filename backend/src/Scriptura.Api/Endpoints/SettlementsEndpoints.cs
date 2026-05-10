@@ -19,6 +19,7 @@ public static class SettlementsEndpoints
         group.MapPost("/{id:guid}/alternative-names", AddAlternativeName);
         group.MapGet("/", GetAllSettlements);
         group.MapPut("/{id:guid}/location", UpdateLocation);
+        group.MapPut("/{id:guid}/modern-division", UpdateModernDivision);
     }
 
     private static async Task<IResult> CreateSettlement(
@@ -136,5 +137,28 @@ public static class SettlementsEndpoints
         await repository.SaveChangesAsync(cancellationToken);
 
         return Results.Ok(new { Message = "Settlement location updated successfully." });
+    }
+
+    private static async Task<IResult> UpdateModernDivision(
+        Guid id,
+        [FromBody] UpdateModernDivisionRequest request,
+        [FromServices] ISettlementRepository repository,
+        CancellationToken cancellationToken)
+    {
+        var settlement = await repository.GetByIdAsync(id, cancellationToken);
+
+        if (settlement is null)
+            return Results.NotFound(new { Message = $"Settlement with ID {id} not found." });
+
+        var newDivision = new ModernDivision(
+            request.Region,
+            request.District,
+            request.Community);
+
+        settlement.UpdateModernAdminDivision(newDivision);
+
+        await repository.SaveChangesAsync(cancellationToken);
+
+        return Results.Ok(new { Message = "Modern administrative division updated successfully." });
     }
 }
