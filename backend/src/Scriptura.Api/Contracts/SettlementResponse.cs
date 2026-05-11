@@ -5,5 +5,6 @@ public record SettlementResponse(
     string CurrentName,
     string Type,
     string? ModernRegion,
-    IEnumerable<string> AlternativeNames
+    IEnumerable<string> AlternativeNames,
+    IEnumerable<HistoricalDivisionResponse> HistoricalDivisions
 );

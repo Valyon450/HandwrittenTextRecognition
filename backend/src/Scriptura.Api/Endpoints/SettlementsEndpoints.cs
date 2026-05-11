@@ -20,6 +20,7 @@ public static class SettlementsEndpoints
         group.MapGet("/", GetAllSettlements);
         group.MapPut("/{id:guid}/location", UpdateLocation);
         group.MapPut("/{id:guid}/modern-division", UpdateModernDivision);
+        group.MapPost("/{id:guid}/historical-divisions", AddHistoricalDivision);
     }
 
     private static async Task<IResult> CreateSettlement(
@@ -57,7 +58,8 @@ public static class SettlementsEndpoints
             settlement.CurrentName,
             settlement.Type.ToString(),
             settlement.ModernAdminDivision?.Region,
-            settlement.AlternativeNames);
+            settlement.AlternativeNames,
+            settlement.HistoricalDivisions.Select(d => new HistoricalDivisionResponse(d.Governorate, d.County, d.Parish)));
 
         return Results.Created($"/api/settlements/{settlement.Id}", response);
     }
@@ -77,7 +79,8 @@ public static class SettlementsEndpoints
             settlement.CurrentName,
             settlement.Type.ToString(),
             settlement.ModernAdminDivision?.Region,
-            settlement.AlternativeNames);
+            settlement.AlternativeNames,
+            settlement.HistoricalDivisions.Select(d => new HistoricalDivisionResponse(d.Governorate, d.County, d.Parish)));
 
         return Results.Ok(response);
     }
@@ -93,7 +96,8 @@ public static class SettlementsEndpoints
             s.CurrentName,
             s.Type.ToString(),
             s.ModernAdminDivision?.Region,
-            s.AlternativeNames));
+            s.AlternativeNames,
+            s.HistoricalDivisions.Select(d => new HistoricalDivisionResponse(d.Governorate, d.County, d.Parish))));
 
         return Results.Ok(response);
     }
@@ -160,5 +164,35 @@ public static class SettlementsEndpoints
         await repository.SaveChangesAsync(cancellationToken);
 
         return Results.Ok(new { Message = "Modern administrative division updated successfully." });
+    }
+
+    private static async Task<IResult> AddHistoricalDivision(
+        Guid id,
+        [FromBody] AddHistoricalDivisionRequest request,
+        [FromServices] ISettlementRepository repository,
+        CancellationToken cancellationToken)
+    {
+        var settlement = await repository.GetByIdAsync(id, cancellationToken);
+
+        if (settlement is null)
+            return Results.NotFound(new { Message = $"Settlement with ID {id} not found." });
+
+        try
+        {
+            // Створюємо ValueObject з новими параметрами
+            var division = new HistoricalDivision(
+                request.Governorate ?? string.Empty,
+                request.County ?? string.Empty,
+                request.Parish ?? string.Empty);
+
+            settlement.AddHistoricalDivision(division);
+            await repository.SaveChangesAsync(cancellationToken);
+        }
+        catch (ArgumentException ex)
+        {
+            return Results.BadRequest(new { Message = ex.Message });
+        }
+
+        return Results.Ok(new { Message = "Historical division added successfully." });
     }
 }
