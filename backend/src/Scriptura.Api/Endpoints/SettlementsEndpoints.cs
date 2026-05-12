@@ -15,6 +15,7 @@ public static class SettlementsEndpoints
                        .WithTags("Settlements");
 
         group.MapPost("/", CreateSettlement);
+        group.MapGet("/search", SearchSettlements);
         group.MapGet("/{id:guid}", GetSettlementById);
         group.MapPost("/{id:guid}/alternative-names", AddAlternativeName);
         group.MapGet("/", GetAllSettlements);
@@ -194,5 +195,28 @@ public static class SettlementsEndpoints
         }
 
         return Results.Ok(new { Message = "Historical division added successfully." });
+    }
+
+    private static async Task<IResult> SearchSettlements(
+        [FromQuery] string q,
+        [FromServices] ISettlementRepository repository,
+        CancellationToken cancellationToken)
+    {
+        // Мінімальна валідація, щоб не шукати по одній букві
+        if (string.IsNullOrWhiteSpace(q) || q.Length < 2)
+            return Results.BadRequest(new { Message = "Search query must be at least 2 characters long." });
+
+        var settlements = await repository.SearchByNameAsync(q, cancellationToken);
+
+        var response = settlements.Select(s => new SettlementResponse(
+            s.Id,
+            s.CurrentName,
+            s.Type.ToString(),
+            s.ModernAdminDivision?.Region,
+            s.AlternativeNames,
+            s.HistoricalDivisions.Select(d => new HistoricalDivisionResponse(d.Governorate, d.County, d.Parish))
+        ));
+
+        return Results.Ok(response);
     }
 }

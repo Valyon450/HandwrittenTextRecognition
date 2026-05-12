@@ -20,4 +20,17 @@ internal sealed class SettlementRepository(ScripturaDbContext dbContext)
 
     public Task SaveChangesAsync(CancellationToken cancellationToken = default)
         => DbContext.SaveChangesAsync(cancellationToken);
+
+    public async Task<IReadOnlyList<Settlement>> SearchByNameAsync(string query, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(query))
+            return [];
+
+        var normalizedQuery = query.ToLower();
+
+        return await DbContext.Set<Settlement>()
+            .AsNoTracking()
+            .Where(s => s.CurrentName.ToLower().Contains(normalizedQuery))
+            .ToListAsync(cancellationToken);
+    }
 }

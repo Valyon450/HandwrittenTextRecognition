@@ -11,4 +11,6 @@ public interface ISettlementRepository
     void Add(Settlement settlement);
 
     Task SaveChangesAsync(CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<Settlement>> SearchByNameAsync(string query, CancellationToken cancellationToken = default);
 }
