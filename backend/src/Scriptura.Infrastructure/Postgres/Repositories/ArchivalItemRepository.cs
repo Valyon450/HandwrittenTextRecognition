@@ -31,6 +31,11 @@ internal sealed class ArchivalItemRepository(ScripturaDbContext dbContext)
         DbContext.Set<ArchivalItem>().Add(item);
     }
 
+    public void Remove(ArchivalItem item)
+    {
+        DbContext.Set<ArchivalItem>().Remove(item);
+    }
+
     public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         await DbContext.SaveChangesAsync(cancellationToken);

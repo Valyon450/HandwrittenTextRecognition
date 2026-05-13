@@ -11,5 +11,7 @@ namespace Scriptura.Domain.Repositories
         void Add(ArchivalItem item);        
 
         Task SaveChangesAsync(CancellationToken cancellationToken = default);
+
+        void Remove(ArchivalItem item);
     }
 }
