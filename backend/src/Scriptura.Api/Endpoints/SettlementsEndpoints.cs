@@ -22,6 +22,7 @@ public static class SettlementsEndpoints
         group.MapPut("/{id:guid}/location", UpdateLocation);
         group.MapPut("/{id:guid}/modern-division", UpdateModernDivision);
         group.MapPost("/{id:guid}/historical-divisions", AddHistoricalDivision);
+        group.MapDelete("/{id:guid}", DeleteSettlement);
     }
 
     private static async Task<IResult> CreateSettlement(
@@ -180,7 +181,6 @@ public static class SettlementsEndpoints
 
         try
         {
-            // Створюємо ValueObject з новими параметрами
             var division = new HistoricalDivision(
                 request.Governorate ?? string.Empty,
                 request.County ?? string.Empty,
@@ -202,7 +202,6 @@ public static class SettlementsEndpoints
         [FromServices] ISettlementRepository repository,
         CancellationToken cancellationToken)
     {
-        // Мінімальна валідація, щоб не шукати по одній букві
         if (string.IsNullOrWhiteSpace(q) || q.Length < 2)
             return Results.BadRequest(new { Message = "Search query must be at least 2 characters long." });
 
@@ -218,5 +217,21 @@ public static class SettlementsEndpoints
         ));
 
         return Results.Ok(response);
+    }
+
+    private static async Task<IResult> DeleteSettlement(
+        Guid id,
+        [FromServices] ISettlementRepository repository,
+        CancellationToken cancellationToken)
+    {
+        var settlement = await repository.GetByIdAsync(id, cancellationToken);
+
+        if (settlement is null)
+            return Results.NotFound(new { Message = $"Settlement with ID {id} not found." });
+
+        repository.Remove(settlement);
+        await repository.SaveChangesAsync(cancellationToken);
+
+        return Results.NoContent();
     }
 }

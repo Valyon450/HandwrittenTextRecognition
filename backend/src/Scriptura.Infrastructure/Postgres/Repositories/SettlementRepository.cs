@@ -33,4 +33,9 @@ internal sealed class SettlementRepository(ScripturaDbContext dbContext)
             .Where(s => s.CurrentName.ToLower().Contains(normalizedQuery))
             .ToListAsync(cancellationToken);
     }
+
+    public void Remove(Settlement settlement)
+    {
+        DbContext.Set<Settlement>().Remove(settlement);
+    }
 }

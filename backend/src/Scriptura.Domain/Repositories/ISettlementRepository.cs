@@ -13,4 +13,6 @@ public interface ISettlementRepository
     Task SaveChangesAsync(CancellationToken cancellationToken = default);
 
     Task<IReadOnlyList<Settlement>> SearchByNameAsync(string query, CancellationToken cancellationToken = default);
+
+    void Remove(Settlement settlement);
 }
