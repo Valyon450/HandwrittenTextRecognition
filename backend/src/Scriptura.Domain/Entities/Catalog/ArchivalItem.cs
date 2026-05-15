@@ -55,6 +55,14 @@ namespace Scriptura.Domain.Entities.Catalog
                 _settlementIds.Add(settlementId);
         }
 
+        public void UnlinkSettlement(Guid settlementId)
+        {
+            if (_settlementIds.Contains(settlementId))
+            {
+                _settlementIds.Remove(settlementId);
+            }
+        }
+
         public void AddScan(Scan scan)
         {
             ArgumentNullException.ThrowIfNull(scan);

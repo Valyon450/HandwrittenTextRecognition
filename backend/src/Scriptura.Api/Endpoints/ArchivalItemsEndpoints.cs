@@ -18,6 +18,7 @@ public static class ArchivalItemsEndpoints
         group.MapPost("/", CreateArchivalItem);
         group.MapGet("/{id:guid}", GetArchivalItemById);
         group.MapPost("/{id:guid}/settlements", LinkSettlement);
+        group.MapDelete("/{id:guid}/settlements/{settlementId:guid}", UnlinkSettlement);
         group.MapGet("/", GetAllArchivalItems);
         group.MapPost("/{id:guid}/scans", AddScan);
         group.MapDelete("/{id:guid}", DeleteArchivalItem);
@@ -164,6 +165,24 @@ public static class ArchivalItemsEndpoints
             return Results.NotFound(new { Message = $"Archival item with ID {id} not found." });
 
         repository.Remove(item);
+
+        await repository.SaveChangesAsync(cancellationToken);
+
+        return Results.NoContent();
+    }
+
+    private static async Task<IResult> UnlinkSettlement(
+        Guid id,
+        Guid settlementId,
+        [FromServices] IArchivalItemRepository repository,
+        CancellationToken cancellationToken)
+    {
+        var item = await repository.GetByIdWithScansAsync(id, cancellationToken);
+
+        if (item is null)
+            return Results.NotFound(new { Message = $"Archival item with ID {id} not found." });
+
+        item.UnlinkSettlement(settlementId);
 
         await repository.SaveChangesAsync(cancellationToken);
 
