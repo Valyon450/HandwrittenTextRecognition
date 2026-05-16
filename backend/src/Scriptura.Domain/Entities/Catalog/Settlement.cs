@@ -62,5 +62,19 @@ namespace Scriptura.Domain.Entities.Catalog
         {
             ModernAdminDivision = newDivision ?? throw new ArgumentNullException(nameof(newDivision));
         }
+
+        public void RemoveAlternativeName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                return;
+
+            _alternativeNames.Remove(name);
+        }
+
+        public void RemoveHistoricalDivision(HistoricalDivision division)
+        {
+            if (division != null)
+                _historicalDivisions.Remove(division);
+        }
     }
 }
