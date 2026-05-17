@@ -76,5 +76,18 @@ namespace Scriptura.Domain.Entities.Catalog
             if (division != null)
                 _historicalDivisions.Remove(division);
         }
+
+        public void UpdateCurrentName(string newName)
+        {
+            if (string.IsNullOrWhiteSpace(newName))
+                throw new ArgumentException("Current name cannot be empty.", nameof(newName));
+
+            CurrentName = newName;
+        }
+
+        public void UpdateType(SettlementType newType)
+        {
+            Type = newType;
+        }
     }
 }
