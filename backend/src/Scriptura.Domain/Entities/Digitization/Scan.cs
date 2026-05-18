@@ -27,5 +27,14 @@ namespace Scriptura.Domain.Entities.Digitization
 
             return new Scan(Guid.NewGuid(), archivalItemId, orderNumber, sourceUrl);
         }
+
+        public void UpdateDetails(int newOrderNumber, string newSourceUrl)
+        {
+            if (string.IsNullOrWhiteSpace(newSourceUrl))
+                throw new ArgumentException("Source URL cannot be empty.", nameof(newSourceUrl));
+
+            OrderNumber = newOrderNumber;
+            SourceUrl = newSourceUrl;
+        }
     }
 }
