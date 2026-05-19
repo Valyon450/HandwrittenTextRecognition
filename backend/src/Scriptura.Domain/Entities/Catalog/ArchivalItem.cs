@@ -80,5 +80,14 @@ namespace Scriptura.Domain.Entities.Catalog
             foreach (var scan in scans)
                 AddScan(scan);
         }
+
+        public void RemoveScan(Guid scanId)
+        {
+            var scan = _scans.FirstOrDefault(s => s.Id == scanId);
+            if (scan != null)
+            {
+                _scans.Remove(scan);
+            }
+        }
     }
 }
