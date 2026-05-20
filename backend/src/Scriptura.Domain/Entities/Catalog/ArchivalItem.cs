@@ -81,6 +81,14 @@ namespace Scriptura.Domain.Entities.Catalog
                 AddScan(scan);
         }
 
+        public void UpdateTitle(string newTitle)
+        {
+            if (string.IsNullOrWhiteSpace(newTitle))
+                throw new ArgumentException("Title cannot be empty.", nameof(newTitle));
+
+            Title = newTitle;
+        }
+
         public void RemoveScan(Guid scanId)
         {
             var scan = _scans.FirstOrDefault(s => s.Id == scanId);
