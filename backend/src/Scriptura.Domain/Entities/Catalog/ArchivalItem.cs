@@ -89,6 +89,16 @@ namespace Scriptura.Domain.Entities.Catalog
             Title = newTitle;
         }
 
+        public void UpdateSignature(ArchivalSignature newSignature)
+        {
+            Signature = newSignature ?? throw new ArgumentNullException(nameof(newSignature));
+        }
+
+        public void UpdateType(RecordType newType)
+        {
+            Type = newType;
+        }
+
         public void RemoveScan(Guid scanId)
         {
             var scan = _scans.FirstOrDefault(s => s.Id == scanId);
