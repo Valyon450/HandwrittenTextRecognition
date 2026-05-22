@@ -107,5 +107,10 @@ namespace Scriptura.Domain.Entities.Catalog
                 _scans.Remove(scan);
             }
         }
+
+        public void ClearSettlements()
+        {
+            _settlementIds.Clear();
+        }
     }
 }
