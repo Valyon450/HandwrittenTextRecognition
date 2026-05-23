@@ -89,5 +89,15 @@ namespace Scriptura.Domain.Entities.Catalog
         {
             Type = newType;
         }
+
+        public void ClearAlternativeNames()
+        {
+            _alternativeNames.Clear();
+        }
+
+        public void ClearHistoricalDivisions()
+        {
+            _historicalDivisions.Clear();
+        }
     }
 }
