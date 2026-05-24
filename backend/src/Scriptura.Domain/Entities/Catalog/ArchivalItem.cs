@@ -112,5 +112,10 @@ namespace Scriptura.Domain.Entities.Catalog
         {
             _settlementIds.Clear();
         }
+
+        public void ClearScans()
+        {
+            _scans.Clear();
+        }
     }
 }
