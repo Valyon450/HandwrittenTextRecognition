@@ -117,5 +117,9 @@ namespace Scriptura.Domain.Entities.Catalog
         {
             _scans.Clear();
         }
+
+        public bool HasScans => _scans.Any();
+
+        public int ScansCount => _scans.Count;
     }
 }
