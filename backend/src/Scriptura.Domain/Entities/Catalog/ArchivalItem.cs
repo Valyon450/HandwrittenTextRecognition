@@ -121,5 +121,9 @@ namespace Scriptura.Domain.Entities.Catalog
         public bool HasScans => _scans.Any();
 
         public int ScansCount => _scans.Count;
+
+        public bool HasSettlements => _settlementIds.Any();
+
+        public int SettlementsCount => _settlementIds.Count;
     }
 }
