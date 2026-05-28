@@ -125,5 +125,7 @@ namespace Scriptura.Domain.Entities.Catalog
         public bool HasSettlements => _settlementIds.Any();
 
         public int SettlementsCount => _settlementIds.Count;
+
+        public string FullSignature => $"{Signature.ArchiveCode} {Signature.Fond}-{Signature.Inventory}-{Signature.ItemNumber}";
     }
 }
