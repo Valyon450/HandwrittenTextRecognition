@@ -127,5 +127,10 @@ namespace Scriptura.Domain.Entities.Catalog
         public int SettlementsCount => _settlementIds.Count;
 
         public string FullSignature => $"{Signature.ArchiveCode} {Signature.Fond}-{Signature.Inventory}-{Signature.ItemNumber}";
+
+        public override string ToString()
+        {
+            return $"{Title} ({FullSignature})";
+        }
     }
 }
