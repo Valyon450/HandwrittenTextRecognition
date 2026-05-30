@@ -100,6 +100,11 @@ namespace Scriptura.Domain.Entities.Catalog
             _historicalDivisions.Clear();
         }
 
+        public override string ToString()
+        {
+            return $"{CurrentName} ({Type})";
+        }
+
         public bool HasAlternativeNames => _alternativeNames.Any();
         public int AlternativeNamesCount => _alternativeNames.Count;
         public bool HasHistoricalDivisions => _historicalDivisions.Any();
