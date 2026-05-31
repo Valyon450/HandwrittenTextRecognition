@@ -36,5 +36,10 @@ namespace Scriptura.Domain.Entities.Digitization
             OrderNumber = newOrderNumber;
             SourceUrl = newSourceUrl;
         }
+
+        public override string ToString()
+        {
+            return $"Scan {OrderNumber}: {SourceUrl}";
+        }
     }
 }
