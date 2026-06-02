@@ -109,5 +109,7 @@ namespace Scriptura.Domain.Entities.Catalog
         public int AlternativeNamesCount => _alternativeNames.Count;
         public bool HasHistoricalDivisions => _historicalDivisions.Any();
         public int HistoricalDivisionsCount => _historicalDivisions.Count;
+        public bool HasLocation => Location != null;
+        public bool HasModernAdminDivision => ModernAdminDivision != null;
     }
 }
