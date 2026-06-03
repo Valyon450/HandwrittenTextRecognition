@@ -19,5 +19,10 @@
             County = county;
             Parish = parish;
         }
+
+        public bool IsFullySpecified =>
+            !string.IsNullOrWhiteSpace(Governorate) &&
+            !string.IsNullOrWhiteSpace(County) &&
+            !string.IsNullOrWhiteSpace(Parish);
     }
 }
