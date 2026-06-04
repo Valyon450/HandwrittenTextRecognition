@@ -12,5 +12,10 @@
             District = district ?? string.Empty;
             Community = community ?? string.Empty;
         }
+
+        public bool IsFullySpecified =>
+            !string.IsNullOrWhiteSpace(Region) &&
+            !string.IsNullOrWhiteSpace(District) &&
+            !string.IsNullOrWhiteSpace(Community);
     }
 }
