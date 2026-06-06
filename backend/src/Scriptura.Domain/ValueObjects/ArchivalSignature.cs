@@ -26,5 +26,10 @@
             Inventory = inventory;
             ItemNumber = itemNumber;
         }
+
+        public override string ToString()
+        {
+            return $"{ArchiveCode} {Fond}-{Inventory}-{ItemNumber}";
+        }
     }
 }
