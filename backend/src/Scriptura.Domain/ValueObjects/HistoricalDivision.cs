@@ -24,5 +24,10 @@
             !string.IsNullOrWhiteSpace(Governorate) &&
             !string.IsNullOrWhiteSpace(County) &&
             !string.IsNullOrWhiteSpace(Parish);
+
+        public override string ToString()
+        {
+            return $"{Governorate}, {County}, {Parish}";
+        }
     }
 }
