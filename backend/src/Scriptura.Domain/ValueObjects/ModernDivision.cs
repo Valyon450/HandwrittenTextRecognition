@@ -17,5 +17,10 @@
             !string.IsNullOrWhiteSpace(Region) &&
             !string.IsNullOrWhiteSpace(District) &&
             !string.IsNullOrWhiteSpace(Community);
+
+        public override string ToString()
+        {
+            return $"{Region}, {District}, {Community}";
+        }
     }
 }
