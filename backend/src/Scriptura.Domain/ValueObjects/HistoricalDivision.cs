@@ -29,5 +29,10 @@
         {
             return $"{Governorate}, {County}, {Parish}";
         }
+
+        public bool IsEmpty =>
+            string.IsNullOrWhiteSpace(Governorate) &&
+            string.IsNullOrWhiteSpace(County) &&
+            string.IsNullOrWhiteSpace(Parish);
     }
 }
