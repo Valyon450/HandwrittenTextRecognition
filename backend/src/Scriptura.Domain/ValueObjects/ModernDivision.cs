@@ -22,5 +22,10 @@
         {
             return $"{Region}, {District}, {Community}";
         }
+
+        public bool IsEmpty =>
+            string.IsNullOrWhiteSpace(Region) &&
+            string.IsNullOrWhiteSpace(District) &&
+            string.IsNullOrWhiteSpace(Community);
     }
 }
