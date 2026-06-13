@@ -31,5 +31,11 @@
         {
             return $"{ArchiveCode} {Fond}-{Inventory}-{ItemNumber}";
         }
+
+        public bool IsEmpty =>
+            string.IsNullOrWhiteSpace(ArchiveCode) &&
+            string.IsNullOrWhiteSpace(Fond) &&
+            string.IsNullOrWhiteSpace(Inventory) &&
+            string.IsNullOrWhiteSpace(ItemNumber);
     }
 }
