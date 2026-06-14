@@ -37,5 +37,11 @@
             string.IsNullOrWhiteSpace(Fond) &&
             string.IsNullOrWhiteSpace(Inventory) &&
             string.IsNullOrWhiteSpace(ItemNumber);
+
+        public bool IsFullySpecified =>
+            !string.IsNullOrWhiteSpace(ArchiveCode) &&
+            !string.IsNullOrWhiteSpace(Fond) &&
+            !string.IsNullOrWhiteSpace(Inventory) &&
+            !string.IsNullOrWhiteSpace(ItemNumber);
     }
 }
