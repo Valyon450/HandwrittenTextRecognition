@@ -45,5 +45,7 @@ namespace Scriptura.Domain.Entities.Digitization
         public bool IsFamilySearchLink =>
             !string.IsNullOrWhiteSpace(SourceUrl) &&
             SourceUrl.Contains("familysearch.org", StringComparison.OrdinalIgnoreCase);
+
+        public bool HasSourceUrl => !string.IsNullOrWhiteSpace(SourceUrl);
     }
 }
