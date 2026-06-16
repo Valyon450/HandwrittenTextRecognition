@@ -111,5 +111,15 @@ namespace Scriptura.Domain.Entities.Catalog
         public int HistoricalDivisionsCount => _historicalDivisions.Count;
         public bool HasLocation => Location != null;
         public bool HasModernAdminDivision => ModernAdminDivision != null;
+
+        public void ClearLocation()
+        {
+            Location = null;
+        }
+
+        public void ClearModernAdminDivision()
+        {
+            ModernAdminDivision = null;
+        }
     }
 }
