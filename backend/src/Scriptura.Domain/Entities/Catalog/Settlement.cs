@@ -121,5 +121,17 @@ namespace Scriptura.Domain.Entities.Catalog
         {
             ModernAdminDivision = null;
         }
+
+        public bool ContainsAlternativeName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name)) return false;
+            return _alternativeNames.Contains(name);
+        }
+
+        public bool ContainsHistoricalDivision(HistoricalDivision division)
+        {
+            if (division == null) return false;
+            return _historicalDivisions.Contains(division);
+        }
     }
 }
