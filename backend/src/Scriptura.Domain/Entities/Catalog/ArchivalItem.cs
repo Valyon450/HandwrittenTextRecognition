@@ -132,5 +132,11 @@ namespace Scriptura.Domain.Entities.Catalog
         {
             return $"{Title} ({FullSignature})";
         }
+
+        public bool ContainsSettlement(Guid settlementId)
+        {
+            if (settlementId == Guid.Empty) return false;
+            return _settlementIds.Contains(settlementId);
+        }
     }
 }
