@@ -138,5 +138,11 @@ namespace Scriptura.Domain.Entities.Catalog
             if (settlementId == Guid.Empty) return false;
             return _settlementIds.Contains(settlementId);
         }
+
+        public void RemoveScan(Scan scan)
+        {
+            if (scan != null)
+                _scans.Remove(scan);
+        }
     }
 }
