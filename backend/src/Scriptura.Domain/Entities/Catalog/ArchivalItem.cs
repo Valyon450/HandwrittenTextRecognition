@@ -144,5 +144,11 @@ namespace Scriptura.Domain.Entities.Catalog
             if (scan != null)
                 _scans.Remove(scan);
         }
+
+        public void RemoveSettlement(Guid settlementId)
+        {
+            if (settlementId != Guid.Empty)
+                _settlementIds.Remove(settlementId);
+        }
     }
 }
