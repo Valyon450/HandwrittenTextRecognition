@@ -133,5 +133,7 @@ namespace Scriptura.Domain.Entities.Catalog
             if (division == null) return false;
             return _historicalDivisions.Contains(division);
         }
+
+        public bool HasAnyDivisions => HasHistoricalDivisions || HasModernAdminDivision;
     }
 }
