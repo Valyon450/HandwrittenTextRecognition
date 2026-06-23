@@ -135,5 +135,10 @@ namespace Scriptura.Domain.Entities.Catalog
         }
 
         public bool HasAnyDivisions => HasHistoricalDivisions || HasModernAdminDivision;
+
+        public void ClearCoverageYears()
+        {
+            
+        }
     }
 }
