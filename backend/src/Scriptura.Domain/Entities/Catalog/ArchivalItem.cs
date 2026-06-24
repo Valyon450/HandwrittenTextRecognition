@@ -156,5 +156,7 @@ namespace Scriptura.Domain.Entities.Catalog
             if (scan == null) return false;
             return _scans.Contains(scan);
         }
+
+        public bool HasCoveredYears => CoveredYears != null;
     }
 }
