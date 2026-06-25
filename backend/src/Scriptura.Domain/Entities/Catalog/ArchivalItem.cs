@@ -158,5 +158,15 @@ namespace Scriptura.Domain.Entities.Catalog
         }
 
         public bool HasCoveredYears => CoveredYears != null;
+
+        public void LinkToSettlements(IEnumerable<Guid> settlementIds)
+        {
+            ArgumentNullException.ThrowIfNull(settlementIds);
+
+            foreach (var id in settlementIds)
+            {
+                LinkToSettlement(id);
+            }
+        }
     }
 }
