@@ -168,5 +168,15 @@ namespace Scriptura.Domain.Entities.Catalog
                 LinkToSettlement(id);
             }
         }
+
+        public void UnlinkSettlements(IEnumerable<Guid> settlementIds)
+        {
+            ArgumentNullException.ThrowIfNull(settlementIds);
+
+            foreach (var id in settlementIds)
+            {
+                UnlinkSettlement(id);
+            }
+        }
     }
 }
